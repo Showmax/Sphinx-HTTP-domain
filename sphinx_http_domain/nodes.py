@@ -56,7 +56,7 @@ class HttpNode(nodes.Part, nodes.Inline, nodes.TextElement):
 class desc_http_method(HttpNode):
     """HTTP method node."""
     def astext(self):
-        return nodes.TextElement.astext(self) + ' '
+        return nodes.TextElement.astext(self) + '-'
 
     @staticmethod
     def depart_text(self, node):
@@ -299,17 +299,27 @@ class desc_http_fragment(HttpNode):
         self.body.append(self.defs['emphasis'][1])
 
 
-class desc_http_response(HttpNode):
+class desc_http_body(HttpNode):
     """HTTP response node."""
+
+    def astext(self):
+        return self.prefix + nodes.TextElement.astext(self)
+
+    @staticmethod
+    def visit_text(self, node):
+        self.add_text(node.prefix)
 
     @staticmethod
     def visit_html(self, node):
-        self.body.append(self.starttag(node, 'strong', '',
-                                       CLASS='deschttpresponse'))
+        self.body.append(self.starttag(node, 'strong', '', CLASS=node.css_class) +
+                         self.encode(node.prefix) +
+                         '</strong>' +
+                         self.starttag(node, 'em', '',
+                                       CLASS='desc' + node.css_class))
 
     @staticmethod
     def depart_html(self, node):
-        self.body.append('</strong>')
+        self.body.append('</em>')
 
     @staticmethod
     def visit_latex(self, node):
@@ -326,3 +336,11 @@ class desc_http_response(HttpNode):
     @staticmethod
     def depart_man(self, node):
         self.body.append(self.defs['strong'][1])
+
+class desc_http_response(desc_http_body):
+    prefix = u'Response Body: '
+    css_class = 'httpresponse'
+
+class desc_http_request(desc_http_body):
+    prefix = u'Request Body: '
+    css_class = 'httprequest'

@@ -14,13 +14,14 @@ from docutils.parsers.rst import directives
 
 from sphinx.locale import l_, _
 from sphinx.directives import ObjectDescription
-from sphinx.util.docfields import TypedField
+from sphinx.util.docfields import TypedField, Field
 
 from sphinx_http_domain.docfields import NoArgGroupedField, ResponseField
 from sphinx_http_domain.nodes import (desc_http_method, desc_http_url,
                                       desc_http_path, desc_http_patharg,
                                       desc_http_query, desc_http_queryparam,
-                                      desc_http_fragment, desc_http_response)
+                                      desc_http_fragment, desc_http_response,
+                                      desc_http_request)
 from sphinx_http_domain.utils import slugify, slugify_url
 
 try:
@@ -268,13 +269,13 @@ class HTTPMethod(HTTPDescription):
         )
 
 
-class HTTPResponse(HTTPDescription):
+class HTTPBody(HTTPDescription):
     """
     Description of a general HTTP response.
     """
-    typ = 'response'
     nodetype = strong
-
+    required_arguments = 0
+    optional_arguments = 1
     option_spec = {
         'noindex': directives.flag,
     }
@@ -294,9 +295,15 @@ class HTTPResponse(HTTPDescription):
         Transform an HTTP response into RST nodes.
         Returns the reference name.
         """
+
         name = slugify(sig)
-        signode += desc_http_response(name, sig)
+        signode += self.nodetype(name, sig)
         return name
+
+    def get_signatures(self):
+        if len(self.arguments) == 0:
+            self.arguments.append('')
+        return super(HTTPBody, self).get_signatures()
 
     def get_entry(self, name, sig):
         return (self.env.docname, sig, sig)
@@ -313,3 +320,11 @@ class HTTPResponse(HTTPDescription):
         self.indexnode['entries'].append(('single',
                                           _("HTTP response; %s") % sig,
                                           anchor, anchor))
+
+class HTTPRequestBody(HTTPBody):
+    typ = 'request'
+    nodetype = desc_http_request
+
+class HTTPResponseBody(HTTPBody):
+    typ = 'response'
+    nodetype = desc_http_response

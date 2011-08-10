@@ -7,7 +7,6 @@ from docutils import nodes
 
 from sphinx.util.docfields import GroupedField, TypedField
 
-
 class ResponseField(TypedField):
     """
     Like a TypedField, but with automatic descriptions.

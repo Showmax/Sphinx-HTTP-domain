@@ -18,11 +18,12 @@ from sphinx.domains import Domain, ObjType
 from sphinx.roles import XRefRole
 from sphinx.util.nodes import make_refnode
 
-from sphinx_http_domain.directives import HTTPMethod, HTTPResponse
+from sphinx_http_domain.directives import HTTPMethod, HTTPResponseBody, HTTPRequestBody
 from sphinx_http_domain.nodes import (desc_http_method, desc_http_url,
                                       desc_http_path, desc_http_patharg,
                                       desc_http_query, desc_http_queryparam,
-                                      desc_http_fragment, desc_http_response)
+                                      desc_http_fragment, desc_http_response,
+                                      desc_http_request)
 
 
 class HTTPDomain(Domain):
@@ -34,8 +35,9 @@ class HTTPDomain(Domain):
         'response': ObjType(l_('response'), 'response'),
     }
     directives = {
-        'method': HTTPMethod,
-        'response': HTTPResponse,
+        'method'  : HTTPMethod,
+        'response': HTTPResponseBody,
+        'request' : HTTPRequestBody
     }
     roles = {
         'method': XRefRole(),
@@ -124,3 +126,4 @@ def setup(app):
     desc_http_queryparam.contribute_to_app(app)
     desc_http_fragment.contribute_to_app(app)
     desc_http_response.contribute_to_app(app)
+    desc_http_request.contribute_to_app(app)
