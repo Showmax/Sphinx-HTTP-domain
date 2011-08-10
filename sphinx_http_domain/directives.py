@@ -105,8 +105,12 @@ class HTTPMethod(HTTPDescription):
         'noindex': directives.flag,
         'title': directives.unchanged,
         'label-name': directives.unchanged,
-    }
+        }
+
     doc_field_types = [
+        Field('auth', label=l_('Authentication'),
+                   names=('auth', 'authentication'),
+                   has_arg=False),
         TypedField('argument', label=l_('Path arguments'),
                    names=('arg', 'argument', 'patharg'),
                    typenames=('argtype', 'pathargtype'),
