@@ -33,6 +33,7 @@ class HTTPDomain(Domain):
     object_types = {
         'method': ObjType(l_('method'), 'method'),
         'response': ObjType(l_('response'), 'response'),
+        'request': ObjType(l_('request'), 'request'),
     }
     directives = {
         'method'  : HTTPMethod,
@@ -42,10 +43,12 @@ class HTTPDomain(Domain):
     roles = {
         'method': XRefRole(),
         'response': XRefRole(),
+        'request': XRefRole(),
     }
     initial_data = {
         'method': {},    # name -> docname, sig, title, method
         'response': {},  # name -> docname, sig, title
+        'request': {}
     }
 
     def clear_doc(self, docname):
