@@ -7,7 +7,7 @@
 """
 
 import re
-from urlparse import urlsplit
+import urlparse
 
 from docutils.nodes import literal, strong, Text
 from docutils.parsers.rst import directives
@@ -211,8 +211,8 @@ class HTTPMethod(HTTPDescription):
         Splits a ``url`` string into its components.
         Returns (path, query string, fragment).
         """
-        _, _, path, query, fragment = urlsplit(url)
-        return (path, query, fragment)
+        scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
+        return (urlparse.SplitResult(scheme,netloc,path,'','').geturl(), query, fragment)
 
     def handle_signature(self, sig, signode):
         """
