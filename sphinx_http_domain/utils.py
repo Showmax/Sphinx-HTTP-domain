@@ -5,10 +5,12 @@
 
     Utilities for the HTTP domain.
 """
+from __future__ import unicode_literals
 
 import re
 import unicodedata
 
+import six
 
 _slugify_strip_re = re.compile(r'[^\w\s-]')
 _slugify_strip_url_re = re.compile(r'[^\w\s/?=&#;{}-]')
@@ -22,10 +24,10 @@ def slugify(value, strip_re=_slugify_strip_re):
 
     From Django's "django/template/defaultfilters.py".
     """
-    if not isinstance(value, unicode):
-        value = unicode(value)
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(strip_re.sub('', value).strip().lower())
+    if not isinstance(value, six.text_type):
+        value = six.text_type(value)
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+    value = strip_re.sub('', value).strip().lower()
     return _slugify_hyphenate_re.sub('-', value)
 
 

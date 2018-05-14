@@ -8,9 +8,9 @@
     :copyright: Copyright 2011, David Zentgraf.
     :license: BSD, see LICENSE for details
 """
+from __future__ import unicode_literals
 
-from itertools import izip
-
+import six
 from docutils.nodes import literal, Text
 
 from sphinx.locale import l_
@@ -114,7 +114,7 @@ class HTTPDomain(Domain):
         """
         # Method descriptions
         for typ in self.initial_data:
-            for name, entry in self.data[typ].iteritems():
+            for name, entry in six.iteritems(self.data[typ]):
                 docname = entry[0]
                 yield(name, name, typ, docname, typ + '-' + name, 0)
 

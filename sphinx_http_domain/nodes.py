@@ -2,6 +2,7 @@
 """
     Nodes for the HTTP domain.
 """
+from __future__ import unicode_literals
 
 from docutils import nodes
 
@@ -128,9 +129,9 @@ class desc_http_patharg(HttpNode):
     """
     wrapper = (u'{', u'}')
 
-    def astext(self, node):
+    def astext(self):
         return (self.wrapper[0] +
-                nodes.TextElement.astext(node) +
+                nodes.TextElement.astext(self) +
                 self.wrapper[1])
 
     @staticmethod

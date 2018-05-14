@@ -5,9 +5,15 @@
 
     Directives for the HTTP domain.
 """
+from __future__ import unicode_literals
 
 import re
-import urlparse
+
+try:
+    from urllib.parse import urlsplit, SplitResult
+except ImportError:
+    # Python 2 compatibility
+    from urlparse import urlsplit, SplitResult
 
 from docutils.nodes import literal, strong, Text
 from docutils.parsers.rst import directives
@@ -24,10 +30,6 @@ from sphinx_http_domain.nodes import (desc_http_method, desc_http_url,
                                       desc_http_request)
 from sphinx_http_domain.utils import slugify, slugify_url
 
-try:
-    from urlparse import parse_qsl
-except ImportError:
-    from cgi import parse_qsl
 
 class HTTPDescription(ObjectDescription):
     def get_anchor(self, name, sig):
@@ -211,8 +213,8 @@ class HTTPMethod(HTTPDescription):
         Splits a ``url`` string into its components.
         Returns (path, query string, fragment).
         """
-        scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
-        return (urlparse.SplitResult(scheme,netloc,path,'','').geturl(), query, fragment)
+        scheme, netloc, path, query, fragment = urlsplit(url)
+        return SplitResult(scheme,netloc,path,'','').geturl(), query, fragment
 
     def handle_signature(self, sig, signode):
         """
