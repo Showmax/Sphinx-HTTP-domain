@@ -2,6 +2,7 @@
 """
     Fields for the HTTP domain.
 """
+from __future__ import unicode_literals
 
 from docutils import nodes
 
@@ -123,9 +124,10 @@ class NoArgGroupedField(GroupedField):
         super(NoArgGroupedField, self).__init__(*args, **kwargs)
         self.has_arg = False
 
-    def make_field(self, types, domain, items):
+    def make_field(self, types, domain, items, env=None):
         if len(items) == 1 and self.can_collapse:
-            super(NoArgGroupedField, self).make_field(types, domain, items)
+            super(NoArgGroupedField, self).make_field(
+                types, domain, items, env)
         fieldname = nodes.field_name('', self.label)
         listnode = self.list_type()
         for fieldarg, content in items:
