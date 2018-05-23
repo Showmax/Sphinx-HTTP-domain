@@ -54,7 +54,7 @@ class HTTPDomain(Domain):
     def clear_doc(self, docname):
         """Remove traces of a document from self.data."""
         for typ in self.initial_data:
-            for name, entry in self.data[typ].items():
+            for name, entry in list(self.data[typ].items()):
                 if entry[0] == docname:
                     del self.data[typ][name]
 
