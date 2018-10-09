@@ -1,8 +1,9 @@
 *.pyc
-
+*.egg-info/
 build/
 dist/
-
+htmlcov/
 MANIFEST
+.pytest_cache
 .svn/entries
 sphinx_http_domain/.svn/entries
